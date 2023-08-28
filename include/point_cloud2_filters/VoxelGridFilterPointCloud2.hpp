@@ -27,7 +27,7 @@ private:
     double filter_limit_min_ = -1000;
     double filter_limit_max_ = 1000;
     bool negative_ = false;
-    
+
     /** \brief Pointer to a dynamic reconfigure service. */
     std::unique_ptr<dynamic_reconfigure::Server<point_cloud2_filters::VoxelGridPointCloud2Config>> dynamic_reconfigure_srv_;
     dynamic_reconfigure::Server<point_cloud2_filters::VoxelGridPointCloud2Config>::CallbackType dynamic_reconfigure_clbk_;
@@ -37,9 +37,9 @@ private:
 };
 
 VoxelGridFilterPointCloud2::VoxelGridFilterPointCloud2() : FilterPointCloud2() {
-    
+
     filter_ = std::make_shared<pcl::VoxelGrid<Point>>();
-    
+
 };
 
 VoxelGridFilterPointCloud2::~VoxelGridFilterPointCloud2()
@@ -49,9 +49,9 @@ VoxelGridFilterPointCloud2::~VoxelGridFilterPointCloud2()
 
 bool VoxelGridFilterPointCloud2::configure()
 {
-    
+
     FilterPointCloud2::configure();
-    
+
     voxel_grid_ = std::dynamic_pointer_cast<pcl::VoxelGrid<Point>>(filter_);
 
     filters::FilterBase<sensor_msgs::PointCloud2>::getParam(std::string("leaf_size_x"), leaf_size_x_);
@@ -59,7 +59,7 @@ bool VoxelGridFilterPointCloud2::configure()
     filters::FilterBase<sensor_msgs::PointCloud2>::getParam(std::string("leaf_size_z"), leaf_size_z_);
 
     ROS_INFO_NAMED(getName(), "[%s] Using leaf_size='[%f, %f, %f]'", getName().c_str(), leaf_size_x_, leaf_size_y_, leaf_size_z_);
-    
+
     filters::FilterBase<sensor_msgs::PointCloud2>::getParam(std::string("min_points_per_voxel"), min_points_per_voxel_);
     ROS_INFO_NAMED(getName(), "[%s] Using min_points_per_voxel=%d", getName().c_str(), min_points_per_voxel_);
 
@@ -68,40 +68,40 @@ bool VoxelGridFilterPointCloud2::configure()
 
     if (filters::FilterBase<sensor_msgs::PointCloud2>::getParam(std::string("filter_field_name"), filter_field_name_))
     {
-        
+
         ROS_INFO_NAMED(getName(), "[%s] Using filter_field_name=%s", getName().c_str(), filter_field_name_.c_str());
     }
-    
+
     if (filters::FilterBase<sensor_msgs::PointCloud2>::getParam(std::string("filter_limit_min"), filter_limit_min_))
     {
-        
+
         ROS_INFO_NAMED(getName(), "[%s] Using filter_limit_min=%f", getName().c_str(), filter_limit_min_);
     }
-    
+
     if (filters::FilterBase<sensor_msgs::PointCloud2>::getParam(std::string("filter_limit_max"), filter_limit_max_))
     {
-        
+
         ROS_INFO_NAMED(getName(), "[%s] Using filter_limit_max=%f", getName().c_str(), filter_limit_max_);
     }
-    
+
     filters::FilterBase<sensor_msgs::PointCloud2>::getParam(std::string("negative"), negative_);
     ROS_INFO_NAMED(getName(), "[%s] Using negative='%d'", getName().c_str(), negative_);
-    
+
     voxel_grid_->setLeafSize(leaf_size_x_, leaf_size_y_, leaf_size_z_);
     voxel_grid_->setMinimumPointsNumberPerVoxel(min_points_per_voxel_);
     voxel_grid_->setDownsampleAllData(downsample_all_data_);
-    
+
     if (filter_field_name_.length() > 0) {
         voxel_grid_->setFilterFieldName(filter_field_name_);
         voxel_grid_->setFilterLimits(filter_limit_min_, filter_limit_max_);
     }
     voxel_grid_->setFilterLimitsNegative(negative_);
-    
+
     //dynamic reconfigure
     dynamic_reconfigure_srv_ = std::make_unique<dynamic_reconfigure::Server<point_cloud2_filters::VoxelGridPointCloud2Config>>(
         dynamic_reconfigure_mutex_,
         ros::NodeHandle( dynamic_reconfigure_namespace_root_ + "/" + getName()));
-    
+
     dynamic_reconfigure_clbk_ = boost::bind(&VoxelGridFilterPointCloud2::dynamicReconfigureClbk, this, _1, _2);
 
     point_cloud2_filters::VoxelGridPointCloud2Config initial_config;
@@ -117,12 +117,12 @@ bool VoxelGridFilterPointCloud2::configure()
 
     dynamic_reconfigure_srv_->setConfigDefault(initial_config);
     dynamic_reconfigure_srv_->updateConfig(initial_config);
-    
+
     //put this after updateConfig!
     dynamic_reconfigure_srv_->setCallback(dynamic_reconfigure_clbk_);
 
     return true;
-    
+
 };
 
 void VoxelGridFilterPointCloud2::dynamicReconfigureClbk (point_cloud2_filters::VoxelGridPointCloud2Config &config, uint32_t /*level*/)
@@ -131,7 +131,7 @@ void VoxelGridFilterPointCloud2::dynamicReconfigureClbk (point_cloud2_filters::V
     boost::recursive_mutex::scoped_lock lock(dynamic_reconfigure_mutex_);
     bool to_update_limits = false;
     bool to_update_leaf_size = false;
-    
+
     if (leaf_size_x_ != config.leaf_size_x)
     {
         leaf_size_x_ = config.leaf_size_x;
@@ -150,14 +150,14 @@ void VoxelGridFilterPointCloud2::dynamicReconfigureClbk (point_cloud2_filters::V
         to_update_leaf_size = true;
         ROS_DEBUG_NAMED (getName(), "[%s] Setting leaf_size_z to: %f.", getName().c_str(), leaf_size_z_);
     }
-    
+
     if (min_points_per_voxel_ != config.min_points_per_voxel)
     {
         min_points_per_voxel_ = config.min_points_per_voxel;
         voxel_grid_->setMinimumPointsNumberPerVoxel(min_points_per_voxel_);
         ROS_DEBUG_NAMED (getName(), "[%s] Setting min_points_per_voxel to: %d.", getName().c_str(), min_points_per_voxel_);
     }
-    
+
     if (downsample_all_data_ != config.downsample_all_data)
     {
         downsample_all_data_ = config.downsample_all_data;
@@ -188,15 +188,15 @@ void VoxelGridFilterPointCloud2::dynamicReconfigureClbk (point_cloud2_filters::V
         voxel_grid_->setFilterLimitsNegative(negative_);
         ROS_DEBUG_NAMED (getName(), "[%s] Setting negative to: %d.", getName().c_str(), negative_);
     }
-    
-    
+
+
     if (to_update_limits) {
         voxel_grid_->setFilterLimits(filter_limit_min_, filter_limit_max_);
     }
     if (to_update_leaf_size) {
         voxel_grid_->setLeafSize(leaf_size_x_, leaf_size_y_, leaf_size_z_);
     }
-    
+
 
 
 }

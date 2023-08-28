@@ -13,7 +13,7 @@ public:
     ~FilterPointCloud2();
 
 public:
-    
+
 protected:
     std::shared_ptr<pcl::Filter<Point>> filter_;
 
@@ -23,7 +23,7 @@ private:
 };
 
 FilterPointCloud2::FilterPointCloud2() {
-    
+
 };
 
 FilterPointCloud2::~FilterPointCloud2()
@@ -34,12 +34,12 @@ FilterPointCloud2::~FilterPointCloud2()
 
 bool FilterPointCloud2::execute()
 {
-    
+
     filter_->setInputCloud (cloud_out_);
     filter_->filter (*cloud_out_);
 
     return true;
-    
+
 };
 
 
