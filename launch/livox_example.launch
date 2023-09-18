@@ -1,0 +1,8 @@
+<launch>
+    <node pkg="sensor_filters" type="pointcloud2_filter_chain" output="screen"
+          name="pointcloud2_filters">
+        <remap from="~input" to="/livox/lidar" />
+        <remap from="~output" to="/livox/lidar/filtered" />
+        <rosparam command="load" file="$(find point_cloud2_filters)/config/livox_example.yaml" />
+    </node>
+</launch>

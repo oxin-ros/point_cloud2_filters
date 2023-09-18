@@ -12,7 +12,7 @@ class CropBoxFilterPointCloud2 : public FilterIndicesPointCloud2
 {
 public:
     CropBoxFilterPointCloud2();
-    ~CropBoxFilterPointCloud2();
+    ~CropBoxFilterPointCloud2() = default;
 
 public:
     virtual bool configure() override;
@@ -35,11 +35,6 @@ CropBoxFilterPointCloud2::CropBoxFilterPointCloud2() : FilterIndicesPointCloud2(
 
     filter_ = std::make_shared<pcl::CropBox<Point>>();
 };
-
-CropBoxFilterPointCloud2::~CropBoxFilterPointCloud2()
-{
-};
-
 
 bool CropBoxFilterPointCloud2::configure()
 {

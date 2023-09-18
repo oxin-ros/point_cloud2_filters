@@ -23,14 +23,14 @@
 
 namespace point_cloud2_filters {
 
-typedef pcl::PointXYZ Point;
+typedef pcl::PointXYZI Point;
 typedef pcl::PointCloud<Point> PointCloud;
 
 class FilterBasePointCloud2 : public filters::FilterBase<sensor_msgs::PointCloud2>
 {
 public:
     FilterBasePointCloud2();
-    ~FilterBasePointCloud2();
+    ~FilterBasePointCloud2() = default;
 
 public:
     virtual bool configure();
@@ -47,6 +47,7 @@ protected:
     virtual bool execute() = 0;
 
     PointCloud::Ptr cloud_out_;
+    PointCloud::Ptr temp_cloud_;
 
 private:
 
@@ -64,16 +65,11 @@ private:
     std::string output_frame_ = "";
 };
 
-FilterBasePointCloud2::FilterBasePointCloud2() {
-
-    cloud_out_ = std::make_shared<PointCloud>();
-
-    tf_listener_ = std::make_unique<tf2_ros::TransformListener>(tf_buffer_);
-
-};
-
-FilterBasePointCloud2::~FilterBasePointCloud2()
+FilterBasePointCloud2::FilterBasePointCloud2()
 {
+    cloud_out_ = std::make_shared<PointCloud>();
+    temp_cloud_ = std::make_shared<PointCloud>();
+    tf_listener_ = std::make_unique<tf2_ros::TransformListener>(tf_buffer_);
 };
 
 bool FilterBasePointCloud2::configure()

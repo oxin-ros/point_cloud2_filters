@@ -13,10 +13,10 @@ cloud_filter_chain:
       filter_field_name: "z"
       filter_limit_min: -5
       filter_limit_max: 0.2
-      
+
   - name: CropBoxFilter
     type: point_cloud2_filters/CropBoxFilterPointCloud2
-    params:          
+    params:
       active: True
       input_frame: "D435_camera_link"
       output_frame: "D435_camera_depth_optical_frame"
@@ -29,7 +29,7 @@ cloud_filter_chain:
       max_y: 0.4
       min_z: -1
       max_z: 0.8
-      
+
   - name: VoxelGridFilter
     type: point_cloud2_filters/VoxelGridFilterPointCloud2
     params:
@@ -45,7 +45,7 @@ cloud_filter_chain:
       filter_limit_min: -1
       filter_limit_max: 1
       negative: False
-      
+
   - name: ExtractPlane
     type: point_cloud2_filters/SacSegmentationExtractFilterPointCloud2
     params:

@@ -13,7 +13,7 @@ class PassThroughFilterPointCloud2 : public FilterIndicesPointCloud2
 {
 public:
     PassThroughFilterPointCloud2();
-    ~PassThroughFilterPointCloud2();
+    ~PassThroughFilterPointCloud2() = default;
 
 public:
     virtual bool configure() override;
@@ -38,11 +38,6 @@ PassThroughFilterPointCloud2::PassThroughFilterPointCloud2() : FilterIndicesPoin
     filter_ = std::make_shared<pcl::PassThrough<Point>>();
 
 };
-
-PassThroughFilterPointCloud2::~PassThroughFilterPointCloud2()
-{
-};
-
 
 bool PassThroughFilterPointCloud2::configure()
 {

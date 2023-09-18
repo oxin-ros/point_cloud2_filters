@@ -12,7 +12,7 @@ class VoxelGridFilterPointCloud2 : public FilterPointCloud2
 {
 public:
     VoxelGridFilterPointCloud2();
-    ~VoxelGridFilterPointCloud2();
+    ~VoxelGridFilterPointCloud2() = default;
 
 public:
     virtual bool configure() override;
@@ -41,11 +41,6 @@ VoxelGridFilterPointCloud2::VoxelGridFilterPointCloud2() : FilterPointCloud2() {
     filter_ = std::make_shared<pcl::VoxelGrid<Point>>();
 
 };
-
-VoxelGridFilterPointCloud2::~VoxelGridFilterPointCloud2()
-{
-};
-
 
 bool VoxelGridFilterPointCloud2::configure()
 {

@@ -15,7 +15,7 @@ class SacSegmentationExtractFilterPointCloud2 : public FilterBasePointCloud2
 {
 public:
     SacSegmentationExtractFilterPointCloud2();
-    ~SacSegmentationExtractFilterPointCloud2();
+    ~SacSegmentationExtractFilterPointCloud2() = default;
 
 public:
     virtual bool configure() override;
@@ -62,10 +62,6 @@ SacSegmentationExtractFilterPointCloud2::SacSegmentationExtractFilterPointCloud2
     coefficients_ = std::make_shared<pcl::ModelCoefficients>();
     inliers_ =  std::make_shared<pcl::PointIndices>();
 
-};
-
-SacSegmentationExtractFilterPointCloud2::~SacSegmentationExtractFilterPointCloud2()
-{
 };
 
 bool SacSegmentationExtractFilterPointCloud2::configure()
@@ -173,8 +169,8 @@ bool SacSegmentationExtractFilterPointCloud2::execute()
     extract_indices_.setInputCloud (cloud_out_);
     extract_indices_.setIndices (inliers_);
 
-    extract_indices_.filter (*cloud_out_);
-
+    extract_indices_.filter(*temp_cloud_);
+    pcl::copyPointCloud(*temp_cloud_, *cloud_out_);
 
     return true;
 

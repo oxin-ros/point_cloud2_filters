@@ -11,8 +11,8 @@ namespace point_cloud2_filters {
 class FilterIndicesPointCloud2 : public FilterPointCloud2
 {
 public:
-    FilterIndicesPointCloud2();
-    ~FilterIndicesPointCloud2();
+    FilterIndicesPointCloud2() = default;
+    ~FilterIndicesPointCloud2() = default;
 
 public:
     virtual bool configure() override;
@@ -31,14 +31,6 @@ private:
     dynamic_reconfigure::Server<point_cloud2_filters::FilterIndicesPointCloud2Config>::CallbackType dynamic_reconfigure_clbk_;
     void dynamicReconfigureClbk(point_cloud2_filters::FilterIndicesPointCloud2Config &config, uint32_t level);
     boost::recursive_mutex dynamic_reconfigure_mutex_;
-};
-
-FilterIndicesPointCloud2::FilterIndicesPointCloud2() : FilterPointCloud2()
-{
-};
-
-FilterIndicesPointCloud2::~FilterIndicesPointCloud2()
-{
 };
 
 bool FilterIndicesPointCloud2::configure()

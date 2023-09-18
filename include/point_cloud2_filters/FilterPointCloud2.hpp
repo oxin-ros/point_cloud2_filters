@@ -9,8 +9,8 @@ namespace point_cloud2_filters {
 class FilterPointCloud2 : public FilterBasePointCloud2
 {
 public:
-    FilterPointCloud2();
-    ~FilterPointCloud2();
+    FilterPointCloud2() = default;
+    ~FilterPointCloud2() = default;
 
 public:
 
@@ -22,22 +22,11 @@ protected:
 private:
 };
 
-FilterPointCloud2::FilterPointCloud2() {
-
-};
-
-FilterPointCloud2::~FilterPointCloud2()
-{
-};
-
-
-
 bool FilterPointCloud2::execute()
 {
-
     filter_->setInputCloud (cloud_out_);
-    filter_->filter (*cloud_out_);
-
+    filter_->filter(*temp_cloud_);
+    pcl::copyPointCloud(*temp_cloud_, *cloud_out_);
     return true;
 
 };
