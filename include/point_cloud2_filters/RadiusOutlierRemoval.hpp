@@ -1,7 +1,7 @@
 #ifndef RADIUS_OUTLIER_REMOVAL_FILTER_HPP
 #define RADIUS_OUTLIER_REMOVAL_FILTER_HPP
 
-#include <point_cloud2_filters/Filter.hpp>
+#include <point_cloud2_filters/FilterIndices.hpp>
 #include <pcl/filters/radius_outlier_removal.h>
 
 #include <point_cloud2_filters/RadiusOutlierRemovalConfig.h>
@@ -9,7 +9,7 @@
 namespace point_cloud2_filters
 {
 
-    class RadiusOutlierRemovalFilter : public Filter
+    class RadiusOutlierRemovalFilter : public FilterIndices
     {
     public:
         RadiusOutlierRemovalFilter();
@@ -31,14 +31,14 @@ namespace point_cloud2_filters
         boost::recursive_mutex dynamic_reconfigure_mutex_;
     };
 
-    RadiusOutlierRemovalFilter::RadiusOutlierRemovalFilter() : Filter()
+    RadiusOutlierRemovalFilter::RadiusOutlierRemovalFilter() : FilterIndices()
     {
         filter_ = std::make_shared<pcl::RadiusOutlierRemoval<pcl::PCLPointCloud2>>();
     };
 
     bool RadiusOutlierRemovalFilter::configure()
     {
-        Filter::configure();
+        FilterIndices::configure();
 
         ror_ = std::dynamic_pointer_cast<pcl::RadiusOutlierRemoval<pcl::PCLPointCloud2>>(filter_);
 

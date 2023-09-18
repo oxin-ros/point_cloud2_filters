@@ -39,7 +39,6 @@ namespace point_cloud2_filters
 
     bool PassThroughFilter::configure()
     {
-
         FilterIndices::configure();
 
         pass_through_ = std::dynamic_pointer_cast<pcl::PassThrough<pcl::PCLPointCloud2>>(filter_);
