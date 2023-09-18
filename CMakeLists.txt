@@ -8,7 +8,7 @@ find_package(catkin REQUIRED
     roscpp
     pluginlib
     filters
-    tf2_ros 
+    tf2_ros
     pcl_conversions
     pcl_ros
     sensor_msgs
@@ -18,12 +18,12 @@ find_package(catkin REQUIRED
 find_package(Eigen3 REQUIRED)
 
 generate_dynamic_reconfigure_options(
-  cfg/FilterBasePointCloud2.cfg
-  cfg/FilterIndicesPointCloud2.cfg
-  cfg/PassThroughPointCloud2.cfg
-  cfg/CropBoxPointCloud2.cfg
-  cfg/VoxelGridPointCloud2.cfg
-  cfg/SacSegmentationExtractPointCloud2.cfg
+  cfg/FilterBase.cfg
+  cfg/FilterIndices.cfg
+  cfg/PassThrough.cfg
+  cfg/CropBox.cfg
+  cfg/VoxelGrid.cfg
+  cfg/SacSegmentationExtract.cfg
 )
 
 ###################################
@@ -50,7 +50,7 @@ include_directories(
 )
 
 add_library(filter_base_point_cloud2
-  src/FilterBasePointCloud2.cpp
+  src/FilterBase.cpp
 )
 target_link_libraries(filter_base_point_cloud2
     ${catkin_LIBRARIES}
@@ -59,7 +59,7 @@ add_dependencies(filter_base_point_cloud2 ${catkin_EXPORTED_TARGETS} ${${PROJECT
 class_loader_hide_library_symbols(filter_base_point_cloud2)
 
 add_library(filter_point_cloud2
-  src/FilterPointCloud2.cpp
+  src/Filter.cpp
 )
 target_link_libraries(filter_point_cloud2
     ${catkin_LIBRARIES}
@@ -69,7 +69,7 @@ add_dependencies(filter_point_cloud2 ${catkin_EXPORTED_TARGETS} ${${PROJECT_NAME
 class_loader_hide_library_symbols(filter_point_cloud2)
 
 add_library(filter_indices_point_cloud2
-  src/FilterIndicesPointCloud2.cpp
+  src/FilterIndices.cpp
 )
 target_link_libraries(filter_indices_point_cloud2
     ${catkin_LIBRARIES}
@@ -79,7 +79,7 @@ add_dependencies(filter_indices_point_cloud2 ${catkin_EXPORTED_TARGETS} ${${PROJ
 class_loader_hide_library_symbols(filter_indices_point_cloud2)
 
 add_library(pass_through_filter_point_cloud2
-  src/PassThroughFilterPointCloud2.cpp
+  src/PassThroughFilter.cpp
 )
 target_link_libraries(pass_through_filter_point_cloud2
     ${catkin_LIBRARIES}
@@ -88,7 +88,7 @@ add_dependencies(pass_through_filter_point_cloud2 ${catkin_EXPORTED_TARGETS} ${$
 class_loader_hide_library_symbols(pass_through_filter_point_cloud2)
 
 add_library(crop_box_filter_point_cloud2
-  src/CropBoxFilterPointCloud2.cpp
+  src/CropBoxFilter.cpp
 )
 
 target_link_libraries(crop_box_filter_point_cloud2
@@ -99,7 +99,7 @@ add_dependencies(crop_box_filter_point_cloud2 ${catkin_EXPORTED_TARGETS} ${${PRO
 class_loader_hide_library_symbols(crop_box_filter_point_cloud2)
 
 add_library(voxel_grid_filter_point_cloud2
-  src/VoxelGridFilterPointCloud2.cpp
+  src/VoxelGridFilter.cpp
 )
 
 target_link_libraries(voxel_grid_filter_point_cloud2
@@ -110,7 +110,7 @@ add_dependencies(voxel_grid_filter_point_cloud2 ${catkin_EXPORTED_TARGETS} ${${P
 class_loader_hide_library_symbols(voxel_grid_filter_point_cloud2)
 
 add_library(sac_segmentation_extract_filter_point_cloud2
-  src/SacSegmentationExtractFilterPointCloud2.cpp
+  src/SacSegmentationExtractFilter.cpp
 )
 
 target_link_libraries(sac_segmentation_extract_filter_point_cloud2
@@ -124,12 +124,12 @@ class_loader_hide_library_symbols(sac_segmentation_extract_filter_point_cloud2)
 ## Install ##
 #############
 
-install(TARGETS 
-  filter_base_point_cloud2 
-  filter_point_cloud2 
+install(TARGETS
+  filter_base_point_cloud2
+  filter_point_cloud2
   filter_indices_point_cloud2
-  pass_through_filter_point_cloud2 
-  crop_box_filter_point_cloud2 
+  pass_through_filter_point_cloud2
+  crop_box_filter_point_cloud2
   voxel_grid_filter_point_cloud2
   sac_segmentation_extract_filter_point_cloud2
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}

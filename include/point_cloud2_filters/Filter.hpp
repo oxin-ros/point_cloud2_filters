@@ -1,17 +1,17 @@
 #ifndef FILTER_POINT_CLOUD_HPP
 #define FILTER_POINT_CLOUD_HPP
 
-#include <point_cloud2_filters/FilterBasePointCloud2.hpp>
+#include <point_cloud2_filters/FilterBase.hpp>
 #include <pcl/filters/filter.h>
 
 namespace point_cloud2_filters
 {
 
-    class FilterPointCloud2 : public FilterBasePointCloud2
+    class Filter : public FilterBase
     {
     public:
-        FilterPointCloud2() = default;
-        ~FilterPointCloud2() = default;
+        Filter() = default;
+        ~Filter() = default;
 
     public:
     protected:
@@ -22,7 +22,7 @@ namespace point_cloud2_filters
     private:
     };
 
-    bool FilterPointCloud2::execute()
+    bool Filter::execute()
     {
         filter_->setInputCloud(cloud_out_);
         filter_->filter(*temp_cloud_);

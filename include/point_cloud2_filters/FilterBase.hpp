@@ -16,18 +16,18 @@
 // Dynamic reconfigure
 #include <dynamic_reconfigure/server.h>
 #include <boost/thread/recursive_mutex.hpp>
-#include <point_cloud2_filters/FilterBasePointCloud2Config.h>
+#include <point_cloud2_filters/FilterBaseConfig.h>
 
 #include <sensor_msgs/PointCloud2.h>
 #include <pcl_conversions/pcl_conversions.h>
 
 namespace point_cloud2_filters
 {
-    class FilterBasePointCloud2 : public filters::FilterBase<sensor_msgs::PointCloud2>
+    class FilterBase : public filters::FilterBase<sensor_msgs::PointCloud2>
     {
     public:
-        FilterBasePointCloud2();
-        ~FilterBasePointCloud2() = default;
+        FilterBase();
+        ~FilterBase() = default;
 
     public:
         virtual bool configure();
@@ -51,9 +51,9 @@ namespace point_cloud2_filters
         std::unique_ptr<tf2_ros::TransformListener> tf_listener_;
 
         /** \brief Pointer to a dynamic reconfigure service. */
-        std::unique_ptr<dynamic_reconfigure::Server<point_cloud2_filters::FilterBasePointCloud2Config>> dynamic_reconfigure_srv_;
-        dynamic_reconfigure::Server<point_cloud2_filters::FilterBasePointCloud2Config>::CallbackType dynamic_reconfigure_clbk_;
-        void dynamicReconfigureClbk(point_cloud2_filters::FilterBasePointCloud2Config &config, uint32_t level);
+        std::unique_ptr<dynamic_reconfigure::Server<point_cloud2_filters::FilterBaseConfig>> dynamic_reconfigure_srv_;
+        dynamic_reconfigure::Server<point_cloud2_filters::FilterBaseConfig>::CallbackType dynamic_reconfigure_clbk_;
+        void dynamicReconfigureClbk(point_cloud2_filters::FilterBaseConfig &config, uint32_t level);
         boost::recursive_mutex dynamic_reconfigure_mutex_;
 
         bool active_ = true;
@@ -61,14 +61,14 @@ namespace point_cloud2_filters
         std::string output_frame_ = "";
     };
 
-    FilterBasePointCloud2::FilterBasePointCloud2()
+    FilterBase::FilterBase()
     {
         cloud_out_ = std::make_shared<pcl::PCLPointCloud2>();
         temp_cloud_ = std::make_shared<pcl::PCLPointCloud2>();
         tf_listener_ = std::make_unique<tf2_ros::TransformListener>(tf_buffer_);
     };
 
-    bool FilterBasePointCloud2::configure()
+    bool FilterBase::configure()
     {
 
         if (filters::FilterBase<sensor_msgs::PointCloud2>::getParam(std::string("active"), active_))
@@ -89,13 +89,13 @@ namespace point_cloud2_filters
         // WARNING dynamic reconfigure, the base class one. Children can have their own server for their specific values, but
         // be sure to use another namespace to be passed to the dyn server constructor (eg ros::NodeHandle(dynamic_reconfigure_namespace_root_ + "/" + getName())
         dynamic_reconfigure_namespace_root_ = "/filter/" + getName();
-        dynamic_reconfigure_srv_ = std::make_unique<dynamic_reconfigure::Server<point_cloud2_filters::FilterBasePointCloud2Config>>(
+        dynamic_reconfigure_srv_ = std::make_unique<dynamic_reconfigure::Server<point_cloud2_filters::FilterBaseConfig>>(
             dynamic_reconfigure_mutex_,
             ros::NodeHandle(dynamic_reconfigure_namespace_root_ + "/base"));
 
-        dynamic_reconfigure_clbk_ = boost::bind(&FilterBasePointCloud2::dynamicReconfigureClbk, this, _1, _2);
+        dynamic_reconfigure_clbk_ = boost::bind(&FilterBase::dynamicReconfigureClbk, this, _1, _2);
 
-        point_cloud2_filters::FilterBasePointCloud2Config initial_config;
+        point_cloud2_filters::FilterBaseConfig initial_config;
         initial_config.active = active_;
         initial_config.input_frame = input_frame_;
         initial_config.output_frame = output_frame_;
@@ -108,7 +108,7 @@ namespace point_cloud2_filters
         return true;
     };
 
-    bool FilterBasePointCloud2::update(const sensor_msgs::PointCloud2 &data_in, sensor_msgs::PointCloud2 &data_out)
+    bool FilterBase::update(const sensor_msgs::PointCloud2 &data_in, sensor_msgs::PointCloud2 &data_out)
     {
         if (active_)
         {
@@ -154,7 +154,7 @@ namespace point_cloud2_filters
         return true;
     };
 
-    void FilterBasePointCloud2::dynamicReconfigureClbk(point_cloud2_filters::FilterBasePointCloud2Config &config, uint32_t /*level*/)
+    void FilterBase::dynamicReconfigureClbk(point_cloud2_filters::FilterBaseConfig &config, uint32_t /*level*/)
     {
 
         boost::recursive_mutex::scoped_lock lock(dynamic_reconfigure_mutex_);

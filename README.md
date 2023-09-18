@@ -9,7 +9,7 @@ No ROS2 version (yet).
 See launch and config folders
 
 ## Filters list
-### PassThroughFilterPointCloud2
+### PassThroughFilter
 Wrapper for the [pcl::PassThrough](https://pointclouds.org/documentation/classpcl_1_1_pass_through_3_01pcl_1_1_p_c_l_point_cloud2_01_4.html) filter 
 #### Params
 -  `active`*(bool, default: true)* Activate the filter or not.
@@ -21,7 +21,7 @@ Wrapper for the [pcl::PassThrough](https://pointclouds.org/documentation/classpc
 -  `filter_limit_min`*(double, default: 0)* The minimum allowed field value a point will be considered
 -  `filter_limit_min`*(double, default: 1)* The maximum allowed field value a point will be considered
 
-### CropBoxFilterPointCloud2
+### CropBoxFilter
 Wrapper for the [pcl::CropBox](https://pointclouds.org/documentation/classpcl_1_1_crop_box_3_01pcl_1_1_p_c_l_point_cloud2_01_4.html) filter.  
 **Warning** `pcl::CrobBox` parameter `keep_organized` is broken on ROS melodic (on noetic it is ok).
 #### Params
@@ -37,7 +37,7 @@ Wrapper for the [pcl::CropBox](https://pointclouds.org/documentation/classpcl_1_
 -  `min_z`*(double, default: -1.0)* The minimum allowed z value a point will be considered from. Range: -1000.0 to 1000.0
 -  `max_z`*(double, default: -1.0)* The maximum allowed z value a point will be considered from. Range: -1000.0 to 1000.0
 
-### VoxelGridFilterPointCloud2
+### VoxelGridFilter
 Wrapper for the [pcl::VoxelGrid](https://pointclouds.org/documentation/classpcl_1_1_voxel_grid.html) filter.  
 #### Params
 -  `active`*(bool, default: true)* Activate the filter or not.
@@ -53,7 +53,7 @@ Wrapper for the [pcl::VoxelGrid](https://pointclouds.org/documentation/classpcl_
 -  `filter_limit_min`*(double, default: 0)* The minimum allowed field value a point will be considered
 -  `filter_limit_min`*(double, default: 1)* The maximum allowed field value a point will be considered
 
-### SacSegmentationExtractFilterPointCloud2
+### SacSegmentationExtractFilter
 Wrapper to extract a geometric model with [pcl::SACSegmentation](https://pointclouds.org/documentation/classpcl_1_1_s_a_c_segmentation.html) and [pcl::ExtractIndices](https://pointclouds.org/documentation/classpcl_1_1_extract_indices.html).
 #### Params
 -  `active`*(bool, default: true)* Activate the filter or not.

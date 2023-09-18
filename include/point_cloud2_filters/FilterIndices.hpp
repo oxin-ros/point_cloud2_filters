@@ -1,19 +1,19 @@
 #ifndef FILTER_INDICES_POINT_CLOUD_HPP
 #define FILTER_INDICES_POINT_CLOUD_HPP
 
-#include <point_cloud2_filters/FilterPointCloud2.hpp>
+#include <point_cloud2_filters/Filter.hpp>
 #include <pcl/filters/filter_indices.h>
 
-#include <point_cloud2_filters/FilterIndicesPointCloud2Config.h>
+#include <point_cloud2_filters/FilterIndicesConfig.h>
 
 namespace point_cloud2_filters
 {
 
-    class FilterIndicesPointCloud2 : public FilterPointCloud2
+    class FilterIndices : public Filter
     {
     public:
-        FilterIndicesPointCloud2() = default;
-        ~FilterIndicesPointCloud2() = default;
+        FilterIndices() = default;
+        ~FilterIndices() = default;
 
     public:
         virtual bool configure() override;
@@ -28,15 +28,15 @@ namespace point_cloud2_filters
         double user_filter_value_ = std::numeric_limits<double>::quiet_NaN();
 
         /** \brief Pointer to a dynamic reconfigure service. */
-        std::unique_ptr<dynamic_reconfigure::Server<point_cloud2_filters::FilterIndicesPointCloud2Config>> dynamic_reconfigure_srv_;
-        dynamic_reconfigure::Server<point_cloud2_filters::FilterIndicesPointCloud2Config>::CallbackType dynamic_reconfigure_clbk_;
-        void dynamicReconfigureClbk(point_cloud2_filters::FilterIndicesPointCloud2Config &config, uint32_t level);
+        std::unique_ptr<dynamic_reconfigure::Server<point_cloud2_filters::FilterIndicesConfig>> dynamic_reconfigure_srv_;
+        dynamic_reconfigure::Server<point_cloud2_filters::FilterIndicesConfig>::CallbackType dynamic_reconfigure_clbk_;
+        void dynamicReconfigureClbk(point_cloud2_filters::FilterIndicesConfig &config, uint32_t level);
         boost::recursive_mutex dynamic_reconfigure_mutex_;
     };
 
-    bool FilterIndicesPointCloud2::configure()
+    bool FilterIndices::configure()
     {
-        FilterPointCloud2::configure();
+        Filter::configure();
 
         filter_indices_ = std::dynamic_pointer_cast<pcl::FilterIndices<pcl::PCLPointCloud2>>(filter_);
 
@@ -60,13 +60,13 @@ namespace point_cloud2_filters
         }
 
         // dynamic reconfigure
-        dynamic_reconfigure_srv_ = std::make_unique<dynamic_reconfigure::Server<point_cloud2_filters::FilterIndicesPointCloud2Config>>(
+        dynamic_reconfigure_srv_ = std::make_unique<dynamic_reconfigure::Server<point_cloud2_filters::FilterIndicesConfig>>(
             dynamic_reconfigure_mutex_,
             ros::NodeHandle(dynamic_reconfigure_namespace_root_ + "/filter_indices"));
 
-        dynamic_reconfigure_clbk_ = boost::bind(&FilterIndicesPointCloud2::dynamicReconfigureClbk, this, _1, _2);
+        dynamic_reconfigure_clbk_ = boost::bind(&FilterIndices::dynamicReconfigureClbk, this, _1, _2);
 
-        point_cloud2_filters::FilterIndicesPointCloud2Config initial_config;
+        point_cloud2_filters::FilterIndicesConfig initial_config;
         initial_config.keep_organized = keep_organized_;
         initial_config.negative = negative_;
 
@@ -79,7 +79,7 @@ namespace point_cloud2_filters
         return true;
     };
 
-    void FilterIndicesPointCloud2::dynamicReconfigureClbk(point_cloud2_filters::FilterIndicesPointCloud2Config &config, uint32_t /*level*/)
+    void FilterIndices::dynamicReconfigureClbk(point_cloud2_filters::FilterIndicesConfig &config, uint32_t /*level*/)
     {
 
         boost::recursive_mutex::scoped_lock lock(dynamic_reconfigure_mutex_);

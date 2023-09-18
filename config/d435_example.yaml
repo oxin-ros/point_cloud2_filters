@@ -2,7 +2,7 @@ output_queue_size: 1
 
 cloud_filter_chain:
   - name: PassThroughFilter
-    type: point_cloud2_filters/PassThroughFilterPointCloud2
+    type: point_cloud2_filters/PassThroughFilter
     params:
       active: True
       input_frame: "D435_camera_link"
@@ -15,7 +15,7 @@ cloud_filter_chain:
       filter_limit_max: 0.2
 
   - name: CropBoxFilter
-    type: point_cloud2_filters/CropBoxFilterPointCloud2
+    type: point_cloud2_filters/CropBoxFilter
     params:
       active: True
       input_frame: "D435_camera_link"
@@ -31,7 +31,7 @@ cloud_filter_chain:
       max_z: 0.8
 
   - name: VoxelGridFilter
-    type: point_cloud2_filters/VoxelGridFilterPointCloud2
+    type: point_cloud2_filters/VoxelGridFilter
     params:
       active: False
       input_frame: "D435_camera_link"
@@ -47,7 +47,7 @@ cloud_filter_chain:
       negative: False
 
   - name: ExtractPlane
-    type: point_cloud2_filters/SacSegmentationExtractFilterPointCloud2
+    type: point_cloud2_filters/SacSegmentationExtractFilter
     params:
       active: True
       input_frame: "D435_camera_link"

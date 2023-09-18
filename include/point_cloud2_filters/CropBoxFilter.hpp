@@ -1,7 +1,7 @@
 #ifndef CROP_BOX_FILTER_HPP
 #define CROP_BOX_FILTER_HPP
 
-#include <point_cloud2_filters/FilterIndicesPointCloud2.hpp>
+#include <point_cloud2_filters/FilterIndices.hpp>
 #include <pcl/filters/crop_box.h>
 
 #include <point_cloud2_filters/CropBoxPointCloud2Config.h>
@@ -9,11 +9,11 @@
 namespace point_cloud2_filters
 {
 
-    class CropBoxFilterPointCloud2 : public FilterIndicesPointCloud2
+    class CropBoxFilter : public FilterIndices
     {
     public:
-        CropBoxFilterPointCloud2();
-        ~CropBoxFilterPointCloud2() = default;
+        CropBoxFilter();
+        ~CropBoxFilter() = default;
 
     public:
         virtual bool configure() override;
@@ -31,16 +31,15 @@ namespace point_cloud2_filters
         boost::recursive_mutex dynamic_reconfigure_mutex_;
     };
 
-    CropBoxFilterPointCloud2::CropBoxFilterPointCloud2() : FilterIndicesPointCloud2()
+    CropBoxFilter::CropBoxFilter() : FilterIndices()
     {
-
         filter_ = std::make_shared<pcl::CropBox<pcl::PCLPointCloud2>>();
     };
 
-    bool CropBoxFilterPointCloud2::configure()
+    bool CropBoxFilter::configure()
     {
 
-        FilterIndicesPointCloud2::configure();
+        FilterIndices::configure();
 
         crop_box_ = std::dynamic_pointer_cast<pcl::CropBox<pcl::PCLPointCloud2>>(filter_);
 
@@ -92,7 +91,7 @@ namespace point_cloud2_filters
             dynamic_reconfigure_mutex_,
             ros::NodeHandle(dynamic_reconfigure_namespace_root_ + "/" + getName()));
 
-        dynamic_reconfigure_clbk_ = boost::bind(&CropBoxFilterPointCloud2::dynamicReconfigureClbk, this, _1, _2);
+        dynamic_reconfigure_clbk_ = boost::bind(&CropBoxFilter::dynamicReconfigureClbk, this, _1, _2);
 
         point_cloud2_filters::CropBoxPointCloud2Config initial_config;
         initial_config.min_x = min_x_;
@@ -111,7 +110,7 @@ namespace point_cloud2_filters
         return true;
     };
 
-    void CropBoxFilterPointCloud2::dynamicReconfigureClbk(point_cloud2_filters::CropBoxPointCloud2Config &config, uint32_t /*level*/)
+    void CropBoxFilter::dynamicReconfigureClbk(point_cloud2_filters::CropBoxPointCloud2Config &config, uint32_t /*level*/)
     {
 
         boost::recursive_mutex::scoped_lock lock(dynamic_reconfigure_mutex_);

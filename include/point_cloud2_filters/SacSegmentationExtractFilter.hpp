@@ -1,7 +1,7 @@
 #ifndef SAC_SEGMENTATION_EXTRACT_FILTER_POINT_CLOUD_HPP
 #define SAC_SEGMENTATION_EXTRACT_FILTER_POINT_CLOUD_HPP
 
-#include <point_cloud2_filters/FilterBasePointCloud2.hpp>
+#include <point_cloud2_filters/FilterBase.hpp>
 
 #include <pcl/ModelCoefficients.h>
 #include <pcl/segmentation/sac_segmentation.h>
@@ -11,12 +11,11 @@
 
 namespace point_cloud2_filters
 {
-
-    class SacSegmentationExtractFilterPointCloud2 : public FilterBasePointCloud2
+    class SacSegmentationExtractFilter : public FilterBase
     {
     public:
-        SacSegmentationExtractFilterPointCloud2();
-        ~SacSegmentationExtractFilterPointCloud2() = default;
+        SacSegmentationExtractFilter();
+        ~SacSegmentationExtractFilter() = default;
 
     public:
         virtual bool configure() override;
@@ -56,17 +55,17 @@ namespace point_cloud2_filters
         boost::recursive_mutex dynamic_reconfigure_mutex_;
     };
 
-    SacSegmentationExtractFilterPointCloud2::SacSegmentationExtractFilterPointCloud2()
+    SacSegmentationExtractFilter::SacSegmentationExtractFilter()
     {
 
         coefficients_ = std::make_shared<pcl::ModelCoefficients>();
         inliers_ = std::make_shared<pcl::PointIndices>();
     };
 
-    bool SacSegmentationExtractFilterPointCloud2::configure()
+    bool SacSegmentationExtractFilter::configure()
     {
 
-        FilterBasePointCloud2::configure();
+        FilterBase::configure();
 
         if (filters::FilterBase<sensor_msgs::PointCloud2>::getParam(std::string("optimize_coefficents"), optimize_coefficents_))
         {
@@ -132,7 +131,7 @@ namespace point_cloud2_filters
             dynamic_reconfigure_mutex_,
             ros::NodeHandle(dynamic_reconfigure_namespace_root_ + "/" + getName()));
 
-        dynamic_reconfigure_clbk_ = boost::bind(&SacSegmentationExtractFilterPointCloud2::dynamicReconfigureClbk, this, _1, _2);
+        dynamic_reconfigure_clbk_ = boost::bind(&SacSegmentationExtractFilter::dynamicReconfigureClbk, this, _1, _2);
 
         point_cloud2_filters::SacSegmentationExtractPointCloud2Config initial_config;
         initial_config.optimize_coefficents = optimize_coefficents_;
@@ -158,7 +157,7 @@ namespace point_cloud2_filters
         return true;
     };
 
-    bool SacSegmentationExtractFilterPointCloud2::execute()
+    bool SacSegmentationExtractFilter::execute()
     {
 
         sac_segmentation_.setInputCloud(cloud_out_);
@@ -173,7 +172,7 @@ namespace point_cloud2_filters
         return true;
     };
 
-    void SacSegmentationExtractFilterPointCloud2::dynamicReconfigureClbk(point_cloud2_filters::SacSegmentationExtractPointCloud2Config &config, uint32_t /*level*/)
+    void SacSegmentationExtractFilter::dynamicReconfigureClbk(point_cloud2_filters::SacSegmentationExtractPointCloud2Config &config, uint32_t /*level*/)
     {
 
         boost::recursive_mutex::scoped_lock lock(dynamic_reconfigure_mutex_);

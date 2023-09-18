@@ -1,7 +1,7 @@
 #ifndef PASS_THROUGH_FILTER_HPP
 #define PASS_THROUGH_FILTER_HPP
 
-#include <point_cloud2_filters/FilterIndicesPointCloud2.hpp>
+#include <point_cloud2_filters/FilterIndices.hpp>
 #include <pcl/filters/passthrough.h>
 
 #include <point_cloud2_filters/PassThroughPointCloud2Config.h>
@@ -9,11 +9,11 @@
 namespace point_cloud2_filters
 {
 
-    class PassThroughFilterPointCloud2 : public FilterIndicesPointCloud2
+    class PassThroughFilter : public FilterIndices
     {
     public:
-        PassThroughFilterPointCloud2();
-        ~PassThroughFilterPointCloud2() = default;
+        PassThroughFilter();
+        ~PassThroughFilter() = default;
 
     public:
         virtual bool configure() override;
@@ -32,15 +32,15 @@ namespace point_cloud2_filters
         boost::recursive_mutex dynamic_reconfigure_mutex_;
     };
 
-    PassThroughFilterPointCloud2::PassThroughFilterPointCloud2() : FilterIndicesPointCloud2()
+    PassThroughFilter::PassThroughFilter() : FilterIndices()
     {
         filter_ = std::make_shared<pcl::PassThrough<pcl::PCLPointCloud2>>();
     };
 
-    bool PassThroughFilterPointCloud2::configure()
+    bool PassThroughFilter::configure()
     {
 
-        FilterIndicesPointCloud2::configure();
+        FilterIndices::configure();
 
         pass_through_ = std::dynamic_pointer_cast<pcl::PassThrough<pcl::PCLPointCloud2>>(filter_);
 
@@ -61,7 +61,7 @@ namespace point_cloud2_filters
             dynamic_reconfigure_mutex_,
             ros::NodeHandle(dynamic_reconfigure_namespace_root_ + "/" + getName()));
 
-        dynamic_reconfigure_clbk_ = boost::bind(&PassThroughFilterPointCloud2::dynamicReconfigureClbk, this, _1, _2);
+        dynamic_reconfigure_clbk_ = boost::bind(&PassThroughFilter::dynamicReconfigureClbk, this, _1, _2);
 
         point_cloud2_filters::PassThroughPointCloud2Config initial_config;
         initial_config.filter_field_name = filter_field_name_;
@@ -77,7 +77,7 @@ namespace point_cloud2_filters
         return true;
     };
 
-    void PassThroughFilterPointCloud2::dynamicReconfigureClbk(point_cloud2_filters::PassThroughPointCloud2Config &config, uint32_t /*level*/)
+    void PassThroughFilter::dynamicReconfigureClbk(point_cloud2_filters::PassThroughPointCloud2Config &config, uint32_t /*level*/)
     {
 
         boost::recursive_mutex::scoped_lock lock(dynamic_reconfigure_mutex_);

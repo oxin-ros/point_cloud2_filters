@@ -1,7 +1,7 @@
 #ifndef VOXEL_GRID_FILTER_HPP
 #define VOXEL_GRID_FILTER_HPP
 
-#include <point_cloud2_filters/FilterPointCloud2.hpp>
+#include <point_cloud2_filters/Filter.hpp>
 #include <pcl/filters/voxel_grid.h>
 
 #include <point_cloud2_filters/VoxelGridPointCloud2Config.h>
@@ -9,11 +9,11 @@
 namespace point_cloud2_filters
 {
 
-    class VoxelGridFilterPointCloud2 : public FilterPointCloud2
+    class VoxelGridFilter : public Filter
     {
     public:
-        VoxelGridFilterPointCloud2();
-        ~VoxelGridFilterPointCloud2() = default;
+        VoxelGridFilter();
+        ~VoxelGridFilter() = default;
 
     public:
         virtual bool configure() override;
@@ -36,16 +36,16 @@ namespace point_cloud2_filters
         boost::recursive_mutex dynamic_reconfigure_mutex_;
     };
 
-    VoxelGridFilterPointCloud2::VoxelGridFilterPointCloud2() : FilterPointCloud2()
+    VoxelGridFilter::VoxelGridFilter() : Filter()
     {
 
         filter_ = std::make_shared<pcl::VoxelGrid<pcl::PCLPointCloud2>>();
     };
 
-    bool VoxelGridFilterPointCloud2::configure()
+    bool VoxelGridFilter::configure()
     {
 
-        FilterPointCloud2::configure();
+        Filter::configure();
 
         voxel_grid_ = std::dynamic_pointer_cast<pcl::VoxelGrid<pcl::PCLPointCloud2>>(filter_);
 
@@ -98,7 +98,7 @@ namespace point_cloud2_filters
             dynamic_reconfigure_mutex_,
             ros::NodeHandle(dynamic_reconfigure_namespace_root_ + "/" + getName()));
 
-        dynamic_reconfigure_clbk_ = boost::bind(&VoxelGridFilterPointCloud2::dynamicReconfigureClbk, this, _1, _2);
+        dynamic_reconfigure_clbk_ = boost::bind(&VoxelGridFilter::dynamicReconfigureClbk, this, _1, _2);
 
         point_cloud2_filters::VoxelGridPointCloud2Config initial_config;
         initial_config.negative = negative_;
@@ -120,7 +120,7 @@ namespace point_cloud2_filters
         return true;
     };
 
-    void VoxelGridFilterPointCloud2::dynamicReconfigureClbk(point_cloud2_filters::VoxelGridPointCloud2Config &config, uint32_t /*level*/)
+    void VoxelGridFilter::dynamicReconfigureClbk(point_cloud2_filters::VoxelGridPointCloud2Config &config, uint32_t /*level*/)
     {
 
         boost::recursive_mutex::scoped_lock lock(dynamic_reconfigure_mutex_);
