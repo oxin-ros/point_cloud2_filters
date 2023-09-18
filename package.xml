@@ -21,9 +21,8 @@
   <depend>pcl_conversions</depend>
   <depend>filters</depend>
   <depend>sensor_msgs</depend>
-  
-  <buildtool_depend>catkin</buildtool_depend>
 
+  <buildtool_depend>catkin</buildtool_depend>
 
   <export>
     <filters plugin="${prefix}/point_cloud2_filters_plugins.xml" />
