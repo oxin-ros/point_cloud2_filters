@@ -4,7 +4,7 @@
 #include <point_cloud2_filters/Filter.hpp>
 #include <pcl/filters/voxel_grid.h>
 
-#include <point_cloud2_filters/VoxelGridPointCloud2Config.h>
+#include <point_cloud2_filters/VoxelGridConfig.h>
 
 namespace point_cloud2_filters
 {
@@ -30,9 +30,9 @@ namespace point_cloud2_filters
         bool negative_ = false;
 
         /** \brief Pointer to a dynamic reconfigure service. */
-        std::unique_ptr<dynamic_reconfigure::Server<point_cloud2_filters::VoxelGridPointCloud2Config>> dynamic_reconfigure_srv_;
-        dynamic_reconfigure::Server<point_cloud2_filters::VoxelGridPointCloud2Config>::CallbackType dynamic_reconfigure_clbk_;
-        void dynamicReconfigureClbk(point_cloud2_filters::VoxelGridPointCloud2Config &config, uint32_t level);
+        std::unique_ptr<dynamic_reconfigure::Server<point_cloud2_filters::VoxelGridConfig>> dynamic_reconfigure_srv_;
+        dynamic_reconfigure::Server<point_cloud2_filters::VoxelGridConfig>::CallbackType dynamic_reconfigure_clbk_;
+        void dynamicReconfigureClbk(point_cloud2_filters::VoxelGridConfig &config, uint32_t level);
         boost::recursive_mutex dynamic_reconfigure_mutex_;
     };
 
@@ -94,13 +94,13 @@ namespace point_cloud2_filters
         voxel_grid_->setFilterLimitsNegative(negative_);
 
         // dynamic reconfigure
-        dynamic_reconfigure_srv_ = std::make_unique<dynamic_reconfigure::Server<point_cloud2_filters::VoxelGridPointCloud2Config>>(
+        dynamic_reconfigure_srv_ = std::make_unique<dynamic_reconfigure::Server<point_cloud2_filters::VoxelGridConfig>>(
             dynamic_reconfigure_mutex_,
             ros::NodeHandle(dynamic_reconfigure_namespace_root_ + "/" + getName()));
 
         dynamic_reconfigure_clbk_ = boost::bind(&VoxelGridFilter::dynamicReconfigureClbk, this, _1, _2);
 
-        point_cloud2_filters::VoxelGridPointCloud2Config initial_config;
+        point_cloud2_filters::VoxelGridConfig initial_config;
         initial_config.negative = negative_;
         initial_config.leaf_size_x = leaf_size_x_;
         initial_config.leaf_size_y = leaf_size_y_;
@@ -120,7 +120,7 @@ namespace point_cloud2_filters
         return true;
     };
 
-    void VoxelGridFilter::dynamicReconfigureClbk(point_cloud2_filters::VoxelGridPointCloud2Config &config, uint32_t /*level*/)
+    void VoxelGridFilter::dynamicReconfigureClbk(point_cloud2_filters::VoxelGridConfig &config, uint32_t /*level*/)
     {
 
         boost::recursive_mutex::scoped_lock lock(dynamic_reconfigure_mutex_);

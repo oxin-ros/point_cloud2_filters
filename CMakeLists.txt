@@ -18,12 +18,13 @@ find_package(catkin REQUIRED
 find_package(Eigen3 REQUIRED)
 
 generate_dynamic_reconfigure_options(
+  cfg/CropBox.cfg
   cfg/FilterBase.cfg
   cfg/FilterIndices.cfg
   cfg/PassThrough.cfg
-  cfg/CropBox.cfg
-  cfg/VoxelGrid.cfg
+  cfg/RadiusOutlierRemoval.cfg
   cfg/SacSegmentationExtract.cfg
+  cfg/VoxelGrid.cfg
 )
 
 ###################################
@@ -120,18 +121,28 @@ target_link_libraries(sac_segmentation_extract_filter_point_cloud2
 add_dependencies(sac_segmentation_extract_filter_point_cloud2 ${catkin_EXPORTED_TARGETS} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${PROJECT_NAME}_gencfg)
 class_loader_hide_library_symbols(sac_segmentation_extract_filter_point_cloud2)
 
+add_library(radius_outlier_removal_filter_point_cloud2
+  src/RadiusOutlierRemoval.cpp
+)
+target_link_libraries(radius_outlier_removal_filter_point_cloud2
+    ${catkin_LIBRARIES}
+)
+add_dependencies(radius_outlier_removal_filter_point_cloud2 ${catkin_EXPORTED_TARGETS} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${PROJECT_NAME}_gencfg)
+class_loader_hide_library_symbols(radius_outlier_removal_filter_point_cloud2)
+
 #############
 ## Install ##
 #############
 
 install(TARGETS
-  filter_base_point_cloud2
-  filter_point_cloud2
-  filter_indices_point_cloud2
-  pass_through_filter_point_cloud2
   crop_box_filter_point_cloud2
-  voxel_grid_filter_point_cloud2
+  filter_base_point_cloud2
+  filter_indices_point_cloud2
+  filter_point_cloud2
+  pass_through_filter_point_cloud2
+  radius_outlier_removal_filter_point_cloud2
   sac_segmentation_extract_filter_point_cloud2
+  voxel_grid_filter_point_cloud2
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

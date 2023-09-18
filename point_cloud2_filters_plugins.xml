@@ -30,4 +30,12 @@
             </description>
         </class>
     </library>
+
+    <library path="lib/libradius_outlier_removal_filter_point_cloud2">
+        <class name="point_cloud2_filters/RadiusOutlierRemovalFilter" type="point_cloud2_filters::RadiusOutlierRemovalFilter" base_class_type="filters::FilterBase<sensor_msgs::PointCloud2>">
+            <description>
+                A Radius Outlier Removal filter for sensor_msgs/PointCloud2 messages.
+            </description>
+        </class>
+    </library>
 </class_libraries>

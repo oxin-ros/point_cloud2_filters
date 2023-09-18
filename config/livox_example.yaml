@@ -6,7 +6,6 @@ cloud_filter_chain:
     params:
       active: True
       input_frame: "base_footprint"
-      output_frame: "base_footprint"
       keep_organized: False
       negative: False
       #user_filter_value: 5
@@ -21,8 +20,6 @@ cloud_filter_chain:
     type: point_cloud2_filters/VoxelGridFilter
     params:
       active: True
-      input_frame: "base_link"
-      output_frame: "base_link"
       leaf_size_x: 0.1
       leaf_size_y: 0.2
       leaf_size_z: 0.1
@@ -32,6 +29,13 @@ cloud_filter_chain:
       filter_limit_min: -1
       filter_limit_max: 3
       negative: False
+
+  - name: RadiusOutlierRemovalFilter
+    type: point_cloud2_filters/RadiusOutlierRemovalFilter
+    params:
+      active: True
+      min_neighbors: 2
+      radius_search: 0.1
 
   # - name: ExtractPlane
   #   type: point_cloud2_filters/SacSegmentationExtractFilter
