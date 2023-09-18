@@ -27,8 +27,8 @@ namespace point_cloud2_filters
     private:
         pcl::ModelCoefficients::Ptr coefficients_;
         pcl::PointIndices::Ptr inliers_;
-        pcl::SACSegmentation<Point> sac_segmentation_;
-        pcl::ExtractIndices<Point> extract_indices_;
+        pcl::SACSegmentation<pcl::PCLPointCloud2> sac_segmentation_;
+        pcl::ExtractIndices<pcl::PCLPointCloud2> extract_indices_;
 
         double axis_x_ = 0;
         double axis_y_ = 0;

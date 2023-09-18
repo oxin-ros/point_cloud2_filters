@@ -19,7 +19,7 @@ namespace point_cloud2_filters
         virtual bool configure() override;
 
     protected:
-        std::shared_ptr<pcl::FilterIndices<Point>> filter_indices_;
+        std::shared_ptr<pcl::FilterIndices<pcl::PCLPointCloud2>> filter_indices_;
 
     private:
         bool negative_ = false;
@@ -38,7 +38,7 @@ namespace point_cloud2_filters
     {
         FilterPointCloud2::configure();
 
-        filter_indices_ = std::dynamic_pointer_cast<pcl::FilterIndices<Point>>(filter_);
+        filter_indices_ = std::dynamic_pointer_cast<pcl::FilterIndices<pcl::PCLPointCloud2>>(filter_);
 
         filters::FilterBase<sensor_msgs::PointCloud2>::getParam(std::string("keep_organized"), keep_organized_);
         ROS_INFO_NAMED(getName(), "[%s] Using keep organized='%d'", getName().c_str(), keep_organized_);

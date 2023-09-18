@@ -8,7 +8,7 @@ cloud_filter_chain:
       input_frame: "base_footprint"
       output_frame: "base_footprint"
       keep_organized: False
-      negative: True
+      negative: False
       #user_filter_value: 5
       min_x: -2.0
       max_x: 8.0

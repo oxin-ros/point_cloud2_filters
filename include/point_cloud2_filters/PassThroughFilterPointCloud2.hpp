@@ -19,7 +19,7 @@ namespace point_cloud2_filters
         virtual bool configure() override;
 
     private:
-        std::shared_ptr<pcl::PassThrough<Point>> pass_through_;
+        std::shared_ptr<pcl::PassThrough<pcl::PCLPointCloud2>> pass_through_;
 
         std::string filter_field_name_ = "z";
         double filter_limit_min_ = 0;
@@ -34,8 +34,7 @@ namespace point_cloud2_filters
 
     PassThroughFilterPointCloud2::PassThroughFilterPointCloud2() : FilterIndicesPointCloud2()
     {
-
-        filter_ = std::make_shared<pcl::PassThrough<Point>>();
+        filter_ = std::make_shared<pcl::PassThrough<pcl::PCLPointCloud2>>();
     };
 
     bool PassThroughFilterPointCloud2::configure()
@@ -43,7 +42,7 @@ namespace point_cloud2_filters
 
         FilterIndicesPointCloud2::configure();
 
-        pass_through_ = std::dynamic_pointer_cast<pcl::PassThrough<Point>>(filter_);
+        pass_through_ = std::dynamic_pointer_cast<pcl::PassThrough<pcl::PCLPointCloud2>>(filter_);
 
         filters::FilterBase<sensor_msgs::PointCloud2>::getParam(std::string("filter_field_name"), filter_field_name_);
         ROS_INFO_NAMED(getName(), "[%s] Using field name='%s'", getName().c_str(), filter_field_name_.c_str());

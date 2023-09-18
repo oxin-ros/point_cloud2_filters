@@ -19,7 +19,7 @@ namespace point_cloud2_filters
         virtual bool configure() override;
 
     private:
-        std::shared_ptr<pcl::VoxelGrid<Point>> voxel_grid_;
+        std::shared_ptr<pcl::VoxelGrid<pcl::PCLPointCloud2>> voxel_grid_;
 
         double leaf_size_x_, leaf_size_y_, leaf_size_z_ = 0.01;
         unsigned int min_points_per_voxel_ = 0;
@@ -39,7 +39,7 @@ namespace point_cloud2_filters
     VoxelGridFilterPointCloud2::VoxelGridFilterPointCloud2() : FilterPointCloud2()
     {
 
-        filter_ = std::make_shared<pcl::VoxelGrid<Point>>();
+        filter_ = std::make_shared<pcl::VoxelGrid<pcl::PCLPointCloud2>>();
     };
 
     bool VoxelGridFilterPointCloud2::configure()
@@ -47,7 +47,7 @@ namespace point_cloud2_filters
 
         FilterPointCloud2::configure();
 
-        voxel_grid_ = std::dynamic_pointer_cast<pcl::VoxelGrid<Point>>(filter_);
+        voxel_grid_ = std::dynamic_pointer_cast<pcl::VoxelGrid<pcl::PCLPointCloud2>>(filter_);
 
         filters::FilterBase<sensor_msgs::PointCloud2>::getParam(std::string("leaf_size_x"), leaf_size_x_);
         filters::FilterBase<sensor_msgs::PointCloud2>::getParam(std::string("leaf_size_y"), leaf_size_y_);

@@ -19,7 +19,7 @@ namespace point_cloud2_filters
         virtual bool configure() override;
 
     private:
-        std::shared_ptr<pcl::CropBox<Point>> crop_box_;
+        std::shared_ptr<pcl::CropBox<pcl::PCLPointCloud2>> crop_box_;
 
         double min_x_, min_y_, min_z_ = -1;
         double max_x_, max_y_, max_z_ = 1;
@@ -34,7 +34,7 @@ namespace point_cloud2_filters
     CropBoxFilterPointCloud2::CropBoxFilterPointCloud2() : FilterIndicesPointCloud2()
     {
 
-        filter_ = std::make_shared<pcl::CropBox<Point>>();
+        filter_ = std::make_shared<pcl::CropBox<pcl::PCLPointCloud2>>();
     };
 
     bool CropBoxFilterPointCloud2::configure()
@@ -42,7 +42,7 @@ namespace point_cloud2_filters
 
         FilterIndicesPointCloud2::configure();
 
-        crop_box_ = std::dynamic_pointer_cast<pcl::CropBox<Point>>(filter_);
+        crop_box_ = std::dynamic_pointer_cast<pcl::CropBox<pcl::PCLPointCloud2>>(filter_);
 
         if (filters::FilterBase<sensor_msgs::PointCloud2>::getParam(std::string("min_x"), min_x_))
         {

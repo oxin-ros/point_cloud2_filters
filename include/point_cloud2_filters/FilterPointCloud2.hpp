@@ -15,7 +15,7 @@ namespace point_cloud2_filters
 
     public:
     protected:
-        std::shared_ptr<pcl::Filter<Point>> filter_;
+        std::shared_ptr<pcl::Filter<pcl::PCLPointCloud2>> filter_;
 
         virtual bool execute() override;
 

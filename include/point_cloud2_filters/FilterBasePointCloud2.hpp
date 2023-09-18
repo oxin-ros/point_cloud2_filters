@@ -23,10 +23,6 @@
 
 namespace point_cloud2_filters
 {
-
-    typedef pcl::PointXYZI Point;
-    typedef pcl::PointCloud<Point> PointCloud;
-
     class FilterBasePointCloud2 : public filters::FilterBase<sensor_msgs::PointCloud2>
     {
     public:
@@ -47,8 +43,8 @@ namespace point_cloud2_filters
 
         virtual bool execute() = 0;
 
-        PointCloud::Ptr cloud_out_;
-        PointCloud::Ptr temp_cloud_;
+        pcl::PCLPointCloud2Ptr cloud_out_;
+        pcl::PCLPointCloud2Ptr temp_cloud_;
 
     private:
         tf2_ros::Buffer tf_buffer_;
@@ -67,8 +63,8 @@ namespace point_cloud2_filters
 
     FilterBasePointCloud2::FilterBasePointCloud2()
     {
-        cloud_out_ = std::make_shared<PointCloud>();
-        temp_cloud_ = std::make_shared<PointCloud>();
+        cloud_out_ = std::make_shared<pcl::PCLPointCloud2>();
+        temp_cloud_ = std::make_shared<pcl::PCLPointCloud2>();
         tf_listener_ = std::make_unique<tf2_ros::TransformListener>(tf_buffer_);
     };
 
@@ -114,16 +110,21 @@ namespace point_cloud2_filters
 
     bool FilterBasePointCloud2::update(const sensor_msgs::PointCloud2 &data_in, sensor_msgs::PointCloud2 &data_out)
     {
-
         if (active_)
         {
-            pcl::fromROSMsg(data_in, *cloud_out_);
 
-            // TODO do not transform if already that frame
-            if (input_frame_.length() > 0)
+            // TODO: do not transform if already that frame
+            if (!input_frame_.empty())
             {
-
-                pcl_ros::transformPointCloud(input_frame_, *cloud_out_, *cloud_out_, tf_buffer_);
+                // Transform to input frame.
+                sensor_msgs::PointCloud2 output;
+                pcl_ros::transformPointCloud(input_frame_, data_in, output, tf_buffer_);
+                pcl_conversions::toPCL(output, *cloud_out_);
+            }
+            else
+            {
+                // Convert to PCL point type.
+                pcl_conversions::toPCL(data_in, *cloud_out_);
             }
 
             if (!execute())
@@ -132,14 +133,18 @@ namespace point_cloud2_filters
                 return false;
             }
 
-            // TODO do not transform if already that frame
-            if (output_frame_.length() > 0)
+            // TODO: do not transform if already that frame
+            if (!output_frame_.empty())
             {
-
-                pcl_ros::transformPointCloud(output_frame_, *cloud_out_, *cloud_out_, tf_buffer_);
+                // Transform to output frame.
+                pcl_conversions::fromPCL(*cloud_out_, data_out);
+                pcl_ros::transformPointCloud(output_frame_, data_out, data_out, tf_buffer_);
             }
-
-            pcl::toROSMsg(*cloud_out_, data_out);
+            else
+            {
+                // Convert to ROS point type.
+                pcl_conversions::fromPCL(*cloud_out_, data_out);
+            }
         }
         else
         {
