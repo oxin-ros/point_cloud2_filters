@@ -1,12 +1,12 @@
 #ifndef RADIUS_OUTLIER_REMOVAL_FILTER_HPP
 #define RADIUS_OUTLIER_REMOVAL_FILTER_HPP
 
-#include <point_cloud2_filters/FilterIndices.hpp>
+#include <oxin_filters/FilterIndices.hpp>
 #include <pcl/filters/radius_outlier_removal.h>
 
-#include <point_cloud2_filters/RadiusOutlierRemovalConfig.h>
+#include <oxin_filters/RadiusOutlierRemovalConfig.h>
 
-namespace point_cloud2_filters
+namespace oxin_filters
 {
 
     class RadiusOutlierRemovalFilter : public FilterIndices
@@ -25,9 +25,9 @@ namespace point_cloud2_filters
         double radius_search_ = 0.1;
 
         /** \brief Pointer to a dynamic reconfigure service. */
-        std::unique_ptr<dynamic_reconfigure::Server<point_cloud2_filters::RadiusOutlierRemovalConfig>> dynamic_reconfigure_srv_;
-        dynamic_reconfigure::Server<point_cloud2_filters::RadiusOutlierRemovalConfig>::CallbackType dynamic_reconfigure_clbk_;
-        void dynamicReconfigureClbk(point_cloud2_filters::RadiusOutlierRemovalConfig &config, uint32_t level);
+        std::unique_ptr<dynamic_reconfigure::Server<oxin_filters::RadiusOutlierRemovalConfig>> dynamic_reconfigure_srv_;
+        dynamic_reconfigure::Server<oxin_filters::RadiusOutlierRemovalConfig>::CallbackType dynamic_reconfigure_clbk_;
+        void dynamicReconfigureClbk(oxin_filters::RadiusOutlierRemovalConfig &config, uint32_t level);
         boost::recursive_mutex dynamic_reconfigure_mutex_;
     };
 
@@ -49,13 +49,13 @@ namespace point_cloud2_filters
         ror_->setRadiusSearch(radius_search_);
 
         // dynamic reconfigure
-        dynamic_reconfigure_srv_ = std::make_unique<dynamic_reconfigure::Server<point_cloud2_filters::RadiusOutlierRemovalConfig>>(
+        dynamic_reconfigure_srv_ = std::make_unique<dynamic_reconfigure::Server<oxin_filters::RadiusOutlierRemovalConfig>>(
             dynamic_reconfigure_mutex_,
             ros::NodeHandle(dynamic_reconfigure_namespace_root_ + "/" + getName()));
 
         dynamic_reconfigure_clbk_ = boost::bind(&RadiusOutlierRemovalFilter::dynamicReconfigureClbk, this, _1, _2);
 
-        point_cloud2_filters::RadiusOutlierRemovalConfig initial_config;
+        oxin_filters::RadiusOutlierRemovalConfig initial_config;
         initial_config.min_neighbors = min_neighbors_;
         initial_config.radius_search = radius_search_;
 
@@ -68,7 +68,7 @@ namespace point_cloud2_filters
         return true;
     };
 
-    void RadiusOutlierRemovalFilter::dynamicReconfigureClbk(point_cloud2_filters::RadiusOutlierRemovalConfig &config, uint32_t /*level*/)
+    void RadiusOutlierRemovalFilter::dynamicReconfigureClbk(oxin_filters::RadiusOutlierRemovalConfig &config, uint32_t /*level*/)
     {
 
         boost::recursive_mutex::scoped_lock lock(dynamic_reconfigure_mutex_);
@@ -89,6 +89,6 @@ namespace point_cloud2_filters
         ror_->setRadiusSearch(radius_search_);
     }
 
-} // namespace point_cloud2_filters
+} // namespace oxin_filters
 
 #endif // RADIUS_OUTLIER_REMOVAL_FILTER_HPP

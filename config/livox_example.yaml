@@ -2,7 +2,7 @@ output_queue_size: 1
 
 cloud_filter_chain:
   - name: CropBoxFilter
-    type: point_cloud2_filters/CropBoxFilter
+    type: oxin_filters/CropBoxFilter
     params:
       active: True
       input_frame: "base_footprint"
@@ -17,7 +17,7 @@ cloud_filter_chain:
       max_z: 3
 
   - name: VoxelGridFilter
-    type: point_cloud2_filters/VoxelGridFilter
+    type: oxin_filters/VoxelGridFilter
     params:
       active: True
       leaf_size_x: 0.1
@@ -31,14 +31,14 @@ cloud_filter_chain:
       negative: False
 
   - name: RadiusOutlierRemovalFilter
-    type: point_cloud2_filters/RadiusOutlierRemovalFilter
+    type: oxin_filters/RadiusOutlierRemovalFilter
     params:
       active: True
       min_neighbors: 2
       radius_search: 0.1
 
   # - name: ExtractPlane
-  #   type: point_cloud2_filters/SacSegmentationExtractFilter
+  #   type: oxin_filters/SacSegmentationExtractFilter
   #   params:
   #     active: True
   #     input_frame: "base_link"

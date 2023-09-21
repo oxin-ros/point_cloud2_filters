@@ -3,6 +3,6 @@
           name="pointcloud2_filters">
         <remap from="~input" to="/livox/lidar" />
         <remap from="~output" to="/livox/lidar/filtered" />
-        <rosparam command="load" file="$(find point_cloud2_filters)/config/livox_example.yaml" />
+        <rosparam command="load" file="$(find oxin_filters)/config/livox_example.yaml" />
     </node>
 </launch>

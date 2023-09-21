@@ -1,10 +1,10 @@
 #ifndef FILTER_POINT_CLOUD_HPP
 #define FILTER_POINT_CLOUD_HPP
 
-#include <point_cloud2_filters/FilterBase.hpp>
+#include <oxin_filters/FilterBase.hpp>
 #include <pcl/filters/filter.h>
 
-namespace point_cloud2_filters
+namespace oxin_filters
 {
 
     class Filter : public FilterBase
@@ -30,6 +30,6 @@ namespace point_cloud2_filters
         return true;
     };
 
-} // namespace point_cloud2_filters
+} // namespace oxin_filters
 
 #endif // FILTER_POINT_CLOUD_HPP

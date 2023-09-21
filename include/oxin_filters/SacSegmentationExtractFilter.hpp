@@ -1,15 +1,15 @@
 #ifndef SAC_SEGMENTATION_EXTRACT_FILTER_POINT_CLOUD_HPP
 #define SAC_SEGMENTATION_EXTRACT_FILTER_POINT_CLOUD_HPP
 
-#include <point_cloud2_filters/FilterBase.hpp>
+#include <oxin_filters/FilterBase.hpp>
 
 #include <pcl/ModelCoefficients.h>
 #include <pcl/segmentation/sac_segmentation.h>
 #include <pcl/filters/extract_indices.h>
 
-#include <point_cloud2_filters/SacSegmentationExtractConfig.h>
+#include <oxin_filters/SacSegmentationExtractConfig.h>
 
-namespace point_cloud2_filters
+namespace oxin_filters
 {
     class SacSegmentationExtractFilter : public FilterBase
     {
@@ -49,9 +49,9 @@ namespace point_cloud2_filters
         int method_type_ = pcl::SAC_RANSAC;
 
         /** \brief Pointer to a dynamic reconfigure service. */
-        std::unique_ptr<dynamic_reconfigure::Server<point_cloud2_filters::SacSegmentationExtractConfig>> dynamic_reconfigure_srv_;
-        dynamic_reconfigure::Server<point_cloud2_filters::SacSegmentationExtractConfig>::CallbackType dynamic_reconfigure_clbk_;
-        void dynamicReconfigureClbk(point_cloud2_filters::SacSegmentationExtractConfig &config, uint32_t level);
+        std::unique_ptr<dynamic_reconfigure::Server<oxin_filters::SacSegmentationExtractConfig>> dynamic_reconfigure_srv_;
+        dynamic_reconfigure::Server<oxin_filters::SacSegmentationExtractConfig>::CallbackType dynamic_reconfigure_clbk_;
+        void dynamicReconfigureClbk(oxin_filters::SacSegmentationExtractConfig &config, uint32_t level);
         boost::recursive_mutex dynamic_reconfigure_mutex_;
     };
 
@@ -127,13 +127,13 @@ namespace point_cloud2_filters
         ROS_INFO_NAMED(getName(), "[%s] Using method_type='%d'", getName().c_str(), method_type_);
 
         // dynamic reconfigure
-        dynamic_reconfigure_srv_ = std::make_unique<dynamic_reconfigure::Server<point_cloud2_filters::SacSegmentationExtractConfig>>(
+        dynamic_reconfigure_srv_ = std::make_unique<dynamic_reconfigure::Server<oxin_filters::SacSegmentationExtractConfig>>(
             dynamic_reconfigure_mutex_,
             ros::NodeHandle(dynamic_reconfigure_namespace_root_ + "/" + getName()));
 
         dynamic_reconfigure_clbk_ = boost::bind(&SacSegmentationExtractFilter::dynamicReconfigureClbk, this, _1, _2);
 
-        point_cloud2_filters::SacSegmentationExtractConfig initial_config;
+        oxin_filters::SacSegmentationExtractConfig initial_config;
         initial_config.optimize_coefficents = optimize_coefficents_;
         initial_config.axis_x = axis_x_;
         initial_config.axis_y = axis_y_;
@@ -172,7 +172,7 @@ namespace point_cloud2_filters
         return true;
     };
 
-    void SacSegmentationExtractFilter::dynamicReconfigureClbk(point_cloud2_filters::SacSegmentationExtractConfig &config, uint32_t /*level*/)
+    void SacSegmentationExtractFilter::dynamicReconfigureClbk(oxin_filters::SacSegmentationExtractConfig &config, uint32_t /*level*/)
     {
 
         boost::recursive_mutex::scoped_lock lock(dynamic_reconfigure_mutex_);
@@ -280,6 +280,6 @@ namespace point_cloud2_filters
         }
     }
 
-} // namespace point_cloud2_filters
+} // namespace oxin_filters
 
 #endif // SAC_SEGMENTATION_EXTRACT_FILTER_POINT_CLOUD_HPP

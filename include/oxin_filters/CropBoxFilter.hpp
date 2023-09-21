@@ -1,12 +1,12 @@
 #ifndef CROP_BOX_FILTER_HPP
 #define CROP_BOX_FILTER_HPP
 
-#include <point_cloud2_filters/FilterIndices.hpp>
+#include <oxin_filters/FilterIndices.hpp>
 #include <pcl/filters/crop_box.h>
 
-#include <point_cloud2_filters/CropBoxConfig.h>
+#include <oxin_filters/CropBoxConfig.h>
 
-namespace point_cloud2_filters
+namespace oxin_filters
 {
 
     class CropBoxFilter : public FilterIndices
@@ -25,9 +25,9 @@ namespace point_cloud2_filters
         double max_x_, max_y_, max_z_ = 1;
 
         /** \brief Pointer to a dynamic reconfigure service. */
-        std::unique_ptr<dynamic_reconfigure::Server<point_cloud2_filters::CropBoxConfig>> dynamic_reconfigure_srv_;
-        dynamic_reconfigure::Server<point_cloud2_filters::CropBoxConfig>::CallbackType dynamic_reconfigure_clbk_;
-        void dynamicReconfigureClbk(point_cloud2_filters::CropBoxConfig &config, uint32_t level);
+        std::unique_ptr<dynamic_reconfigure::Server<oxin_filters::CropBoxConfig>> dynamic_reconfigure_srv_;
+        dynamic_reconfigure::Server<oxin_filters::CropBoxConfig>::CallbackType dynamic_reconfigure_clbk_;
+        void dynamicReconfigureClbk(oxin_filters::CropBoxConfig &config, uint32_t level);
         boost::recursive_mutex dynamic_reconfigure_mutex_;
     };
 
@@ -87,13 +87,13 @@ namespace point_cloud2_filters
         crop_box_->setMax(max_point);
 
         // dynamic reconfigure
-        dynamic_reconfigure_srv_ = std::make_unique<dynamic_reconfigure::Server<point_cloud2_filters::CropBoxConfig>>(
+        dynamic_reconfigure_srv_ = std::make_unique<dynamic_reconfigure::Server<oxin_filters::CropBoxConfig>>(
             dynamic_reconfigure_mutex_,
             ros::NodeHandle(dynamic_reconfigure_namespace_root_ + "/" + getName()));
 
         dynamic_reconfigure_clbk_ = boost::bind(&CropBoxFilter::dynamicReconfigureClbk, this, _1, _2);
 
-        point_cloud2_filters::CropBoxConfig initial_config;
+        oxin_filters::CropBoxConfig initial_config;
         initial_config.min_x = min_x_;
         initial_config.max_x = max_x_;
         initial_config.min_y = min_y_;
@@ -110,7 +110,7 @@ namespace point_cloud2_filters
         return true;
     };
 
-    void CropBoxFilter::dynamicReconfigureClbk(point_cloud2_filters::CropBoxConfig &config, uint32_t /*level*/)
+    void CropBoxFilter::dynamicReconfigureClbk(oxin_filters::CropBoxConfig &config, uint32_t /*level*/)
     {
 
         boost::recursive_mutex::scoped_lock lock(dynamic_reconfigure_mutex_);
@@ -169,6 +169,6 @@ namespace point_cloud2_filters
         }
     }
 
-} // namespace point_cloud2_filters
+} // namespace oxin_filters
 
 #endif // CROP_BOX_FILTER_HPP

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10.2)
-project(point_cloud2_filters)
+project(oxin_filters)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -149,7 +149,7 @@ install(TARGETS
 )
 
 # Install plugins xml file
-install(FILES point_cloud2_filters_plugins.xml
+install(FILES oxin_filters_plugins.xml
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 

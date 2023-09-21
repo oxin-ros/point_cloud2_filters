@@ -1,12 +1,12 @@
 #ifndef FILTER_INDICES_POINT_CLOUD_HPP
 #define FILTER_INDICES_POINT_CLOUD_HPP
 
-#include <point_cloud2_filters/Filter.hpp>
+#include <oxin_filters/Filter.hpp>
 #include <pcl/filters/filter_indices.h>
 
-#include <point_cloud2_filters/FilterIndicesConfig.h>
+#include <oxin_filters/FilterIndicesConfig.h>
 
-namespace point_cloud2_filters
+namespace oxin_filters
 {
 
     class FilterIndices : public Filter
@@ -28,9 +28,9 @@ namespace point_cloud2_filters
         double user_filter_value_ = std::numeric_limits<double>::quiet_NaN();
 
         /** \brief Pointer to a dynamic reconfigure service. */
-        std::unique_ptr<dynamic_reconfigure::Server<point_cloud2_filters::FilterIndicesConfig>> dynamic_reconfigure_srv_;
-        dynamic_reconfigure::Server<point_cloud2_filters::FilterIndicesConfig>::CallbackType dynamic_reconfigure_clbk_;
-        void dynamicReconfigureClbk(point_cloud2_filters::FilterIndicesConfig &config, uint32_t level);
+        std::unique_ptr<dynamic_reconfigure::Server<oxin_filters::FilterIndicesConfig>> dynamic_reconfigure_srv_;
+        dynamic_reconfigure::Server<oxin_filters::FilterIndicesConfig>::CallbackType dynamic_reconfigure_clbk_;
+        void dynamicReconfigureClbk(oxin_filters::FilterIndicesConfig &config, uint32_t level);
         boost::recursive_mutex dynamic_reconfigure_mutex_;
     };
 
@@ -60,13 +60,13 @@ namespace point_cloud2_filters
         }
 
         // dynamic reconfigure
-        dynamic_reconfigure_srv_ = std::make_unique<dynamic_reconfigure::Server<point_cloud2_filters::FilterIndicesConfig>>(
+        dynamic_reconfigure_srv_ = std::make_unique<dynamic_reconfigure::Server<oxin_filters::FilterIndicesConfig>>(
             dynamic_reconfigure_mutex_,
             ros::NodeHandle(dynamic_reconfigure_namespace_root_ + "/filter_indices"));
 
         dynamic_reconfigure_clbk_ = boost::bind(&FilterIndices::dynamicReconfigureClbk, this, _1, _2);
 
-        point_cloud2_filters::FilterIndicesConfig initial_config;
+        oxin_filters::FilterIndicesConfig initial_config;
         initial_config.keep_organized = keep_organized_;
         initial_config.negative = negative_;
 
@@ -79,7 +79,7 @@ namespace point_cloud2_filters
         return true;
     };
 
-    void FilterIndices::dynamicReconfigureClbk(point_cloud2_filters::FilterIndicesConfig &config, uint32_t /*level*/)
+    void FilterIndices::dynamicReconfigureClbk(oxin_filters::FilterIndicesConfig &config, uint32_t /*level*/)
     {
 
         boost::recursive_mutex::scoped_lock lock(dynamic_reconfigure_mutex_);
@@ -99,6 +99,6 @@ namespace point_cloud2_filters
         }
     }
 
-} // namespace point_cloud2_filters
+} // namespace oxin_filters
 
 #endif // FILTER_INDICES_POINT_CLOUD_HPP

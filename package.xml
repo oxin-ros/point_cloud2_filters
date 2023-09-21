@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>point_cloud2_filters</name>
+  <name>oxin_filters</name>
   <version>1.0.2</version>
   <description>Filters for the sensor_msgs/PointCloud2 based on the filters and sensor_filters chains</description>
 
   <author email="toridebraus@gmail.com">Davide Torielli</author>
-  <maintainer email="toridebraus@gmail.com">Davide Torielli</maintainer>
+  <maintainer email="david.b@smartmachine.nz">David B.</maintainer>
 
   <license>BSD</license>
 
@@ -25,6 +25,6 @@
   <buildtool_depend>catkin</buildtool_depend>
 
   <export>
-    <filters plugin="${prefix}/point_cloud2_filters_plugins.xml" />
+    <filters plugin="${prefix}/oxin_filters_plugins.xml" />
   </export>
 </package>

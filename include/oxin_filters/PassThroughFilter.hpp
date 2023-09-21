@@ -1,12 +1,12 @@
 #ifndef PASS_THROUGH_FILTER_HPP
 #define PASS_THROUGH_FILTER_HPP
 
-#include <point_cloud2_filters/FilterIndices.hpp>
+#include <oxin_filters/FilterIndices.hpp>
 #include <pcl/filters/passthrough.h>
 
-#include <point_cloud2_filters/PassThroughConfig.h>
+#include <oxin_filters/PassThroughConfig.h>
 
-namespace point_cloud2_filters
+namespace oxin_filters
 {
 
     class PassThroughFilter : public FilterIndices
@@ -26,9 +26,9 @@ namespace point_cloud2_filters
         double filter_limit_max_ = 1;
 
         /** \brief Pointer to a dynamic reconfigure service. */
-        std::unique_ptr<dynamic_reconfigure::Server<point_cloud2_filters::PassThroughConfig>> dynamic_reconfigure_srv_;
-        dynamic_reconfigure::Server<point_cloud2_filters::PassThroughConfig>::CallbackType dynamic_reconfigure_clbk_;
-        void dynamicReconfigureClbk(point_cloud2_filters::PassThroughConfig &config, uint32_t level);
+        std::unique_ptr<dynamic_reconfigure::Server<oxin_filters::PassThroughConfig>> dynamic_reconfigure_srv_;
+        dynamic_reconfigure::Server<oxin_filters::PassThroughConfig>::CallbackType dynamic_reconfigure_clbk_;
+        void dynamicReconfigureClbk(oxin_filters::PassThroughConfig &config, uint32_t level);
         boost::recursive_mutex dynamic_reconfigure_mutex_;
     };
 
@@ -56,13 +56,13 @@ namespace point_cloud2_filters
         pass_through_->setFilterLimits(filter_limit_min_, filter_limit_max_);
 
         // dynamic reconfigure
-        dynamic_reconfigure_srv_ = std::make_unique<dynamic_reconfigure::Server<point_cloud2_filters::PassThroughConfig>>(
+        dynamic_reconfigure_srv_ = std::make_unique<dynamic_reconfigure::Server<oxin_filters::PassThroughConfig>>(
             dynamic_reconfigure_mutex_,
             ros::NodeHandle(dynamic_reconfigure_namespace_root_ + "/" + getName()));
 
         dynamic_reconfigure_clbk_ = boost::bind(&PassThroughFilter::dynamicReconfigureClbk, this, _1, _2);
 
-        point_cloud2_filters::PassThroughConfig initial_config;
+        oxin_filters::PassThroughConfig initial_config;
         initial_config.filter_field_name = filter_field_name_;
         initial_config.filter_limit_min = filter_limit_min_;
         initial_config.filter_limit_max = filter_limit_max_;
@@ -76,7 +76,7 @@ namespace point_cloud2_filters
         return true;
     };
 
-    void PassThroughFilter::dynamicReconfigureClbk(point_cloud2_filters::PassThroughConfig &config, uint32_t /*level*/)
+    void PassThroughFilter::dynamicReconfigureClbk(oxin_filters::PassThroughConfig &config, uint32_t /*level*/)
     {
 
         boost::recursive_mutex::scoped_lock lock(dynamic_reconfigure_mutex_);
@@ -109,6 +109,6 @@ namespace point_cloud2_filters
         }
     }
 
-} // namespace point_cloud2_filters
+} // namespace oxin_filters
 
 #endif // PASS_THROUGH_FILTER_HPP

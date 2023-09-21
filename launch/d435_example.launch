@@ -2,6 +2,6 @@
     <node pkg="sensor_filters" type="pointcloud2_filter_chain" output="screen" name="pointcloud2_filters">
         <remap from="~input" to="/D435_camera/depth/color/points" />
         <remap from="~output" to="/D435_camera/depth/color/points/filtered" />
-        <rosparam command="load" file="$(find point_cloud2_filters)/config/d435_example.yaml" />
+        <rosparam command="load" file="$(find oxin_filters)/config/d435_example.yaml" />
     </node>
 </launch>
